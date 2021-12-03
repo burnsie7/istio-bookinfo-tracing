@@ -1,0 +1,5 @@
+*.pyc
+local_*
+*.swp
+.env
+.DS_Store
