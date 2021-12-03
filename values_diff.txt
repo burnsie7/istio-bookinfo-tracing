@@ -1,0 +1,181 @@
+diff --git a/default-values.yaml b/datadog-values.yaml
+index 2368a66..79b81ea 100644
+--- a/default-values.yaml
++++ b/datadog-values.yaml
+@@ -25,7 +25,7 @@ datadog:
+ 
+   # datadog.apiKeyExistingSecret -- Use existing Secret which stores API key instead of creating a new one. The value should be set with the `api-key` key inside the secret.
+   ## If set, this parameter takes precedence over "apiKey".
+-  apiKeyExistingSecret:  # <DATADOG_API_KEY_SECRET>
++  apiKeyExistingSecret:  datadog-agent
+ 
+   # datadog.appKey -- Datadog APP key required to use metricsProvider
+   ## If you are using clusterAgent.metricsProvider.enabled = true, you must set
+@@ -96,24 +96,6 @@ datadog:
+     ## ref: https://docs.datadoghq.com/agent/cluster_agent/clusterchecksrunner?tab=helm
+     useClusterCheckRunners: false
+ 
+-    # datadog.kubeStateMetricsCore.labelsAsTags -- Extra labels to collect from resources and to turn into datadog tag.
+-    ## It has the following structure:
+-    ## labelsAsTags:
+-    ##   <resource1>:        # can be pod, deployment, node, etc.
+-    ##     <label1>: <tag1>  # where <label1> is the kubernetes label and <tag1> is the datadog tag
+-    ##     <label2>: <tag2>
+-    ##   <resource2>:
+-    ##     <label3>: <tag3>
+-    ##
+-    ## Warning: the label must match the transformation done by kube-state-metrics,
+-    ## for example tags.datadoghq.com/version becomes label_tags_datadoghq_com_version.
+-    labelsAsTags: {}
+-    #  pod:
+-    #    app: app
+-    #  node:
+-    #    zone: zone
+-    #    team: team
+-
+   ## Manage Cluster checks feature
+   ## ref: https://docs.datadoghq.com/agent/autodiscovery/clusterchecks/
+   ## Autodiscovery via Kube Service annotations is automatically enabled
+@@ -162,7 +144,7 @@ datadog:
+           fieldPath: status.hostIP
+     # datadog.kubelet.tlsVerify -- Toggle kubelet TLS verification
+     # @default -- true
+-    tlsVerify:  # false
++    tlsVerify: false
+     # datadog.kubelet.hostCAPath -- Path (on host) where the Kubelet CA certificate is stored
+     # @default -- None (no mount from host)
+     hostCAPath:
+@@ -211,7 +193,7 @@ datadog:
+     ##
+     ## WARNING: Make sure that hosts using this are properly firewalled otherwise
+     ## metrics and traces are accepted from any host able to connect to this host.
+-    useHostPort: false
++    useHostPort: true
+ 
+     # datadog.dogstatsd.useHostPID -- Run the agent in the host's PID namespace
+     ## This is required for Dogstatsd origin detection to work.
+@@ -236,11 +218,11 @@ datadog:
+   logs:
+     # datadog.logs.enabled -- Enables this to activate Datadog Agent log collection
+     ## ref: https://docs.datadoghq.com/agent/basic_agent_usage/kubernetes/#log-collection-setup
+-    enabled: false
++    enabled: true
+ 
+     # datadog.logs.containerCollectAll -- Enable this to allow log collection for all containers
+     ## ref: https://docs.datadoghq.com/agent/basic_agent_usage/kubernetes/#log-collection-setup
+-    containerCollectAll: false
++    containerCollectAll: true
+ 
+     # datadog.logs.containerCollectUsingFiles -- Collect logs from files in /var/log/pods instead of using container runtime API
+     ## It's usually the most efficient way of collecting logs.
+@@ -251,11 +233,11 @@ datadog:
+   apm:
+     # datadog.apm.socketEnabled -- Enable APM over Socket (Unix Socket or windows named pipe)
+     ## ref: https://docs.datadoghq.com/agent/kubernetes/apm/
+-    socketEnabled: true
++    socketEnabled: false
+ 
+     # datadog.apm.portEnabled -- Enable APM over TCP communication (port 8126 by default)
+     ## ref: https://docs.datadoghq.com/agent/kubernetes/apm/
+-    portEnabled: false
++    portEnabled: true
+ 
+     # datadog.apm.enabled -- Enable this to enable APM and tracing, on port 8126
+     # DEPRECATED. Use datadog.apm.portEnabled instead
+@@ -288,7 +270,9 @@ datadog:
+   # datadog.env -- Set environment variables for all Agents
+   ## The Datadog Agent supports many environment variables.
+   ## ref: https://docs.datadoghq.com/agent/docker/?tab=standard#environment-variables
+-  env: []
++  env:
++    - name: DD_ENV
++      value: istio-bookinfo-env
+   #   - name: <ENV_VAR_NAME>
+   #     value: <ENV_VAR_VALUE>
+ 
+@@ -330,7 +314,7 @@ datadog:
+ 
+     # datadog.processAgent.processCollection -- Set this to true to enable process collection in process monitoring agent
+     ## Requires processAgent.enabled to be set to true to have any effect
+-    processCollection: false
++    processCollection: true
+ 
+     # datadog.processAgent.stripProcessArguments -- Set this to scrub all arguments from collected processes
+     ## Requires processAgent.enabled and processAgent.processCollection to be set to true to have any effect
+@@ -338,7 +322,7 @@ datadog:
+     stripProcessArguments: false
+ 
+     # datadog.processAgent.processDiscovery -- Enables or disables autodiscovery of integrations
+-    processDiscovery: false
++    processDiscovery: true
+ 
+   ## Enable systemProbe agent and provide custom configs
+   systemProbe:
+@@ -396,7 +380,7 @@ datadog:
+ 
+   networkMonitoring:
+     # datadog.networkMonitoring.enabled -- Enable network performance monitoring
+-    enabled: false
++    enabled: true
+ 
+   ## Universal Service Monitoring is currently in private beta.
+   ## See https://www.datadoghq.com/blog/universal-service-monitoring-datadog/ for more details and private beta signup.
+@@ -609,7 +593,6 @@ clusterAgent:
+   ## The Cluster-Agent supports many additional environment variables
+   ## ref: https://docs.datadoghq.com/agent/cluster_agent/commands/#cluster-agent-options
+   env: []
+-
+   # clusterAgent.envFrom --  Set environment variables specific to Cluster Agent from configMaps and/or secrets
+   ## The Cluster-Agent supports many additional environment variables
+   ## ref: https://docs.datadoghq.com/agent/cluster_agent/commands/#cluster-agent-options
+@@ -710,12 +693,12 @@ clusterAgent:
+       maxUnavailable: 0
+ 
+   # clusterAgent.deploymentAnnotations -- Annotations to add to the cluster-agents's deployment
+-  deploymentAnnotations: {}
+-  #   key: "value"
++  deploymentAnnotations:
++    sidecar.istio.io/inject: "false"
+ 
+   # clusterAgent.podAnnotations -- Annotations to add to the cluster-agents's pod(s)
+-  podAnnotations: {}
+-  #   key: "value"
++  podAnnotations:
++    sidecar.istio.io/inject: "false"
+ 
+   # clusterAgent.useHostNetwork -- Bind ports on the hostNetwork
+   ## Useful for CNI networking where hostPort might
+@@ -1110,12 +1093,12 @@ agents:
+   #    value: "1"
+ 
+   # agents.daemonsetAnnotations -- Annotations to add to the DaemonSet
+-  daemonsetAnnotations: {}
+-  #   key: "value"
++  daemonsetAnnotations:
++    sidecar.istio.io/inject: "false"
+ 
+   # agents.podAnnotations -- Annotations to add to the DaemonSet's Pods
+-  podAnnotations: {}
+-  #   <POD_ANNOTATION>: '[{"key": "<KEY>", "value": "<VALUE>"}]'
++  podAnnotations:
++    sidecar.istio.io/inject: "false"
+ 
+   # agents.tolerations -- Allow the DaemonSet to schedule on tainted nodes (requires Kubernetes >= 1.6)
+   tolerations: []
+@@ -1317,12 +1300,12 @@ clusterChecksRunner:
+     failureThreshold: 6
+ 
+   # clusterChecksRunner.deploymentAnnotations -- Annotations to add to the cluster-checks-runner's Deployment
+-  deploymentAnnotations: {}
+-  #   key: "value"
++  deploymentAnnotations:
++    sidecar.istio.io/inject: "false"
+ 
+   # clusterChecksRunner.podAnnotations -- Annotations to add to the cluster-checks-runner's pod(s)
+-  podAnnotations: {}
+-  #   key: "value"
++  podAnnotations:
++    sidecar.istio.io/inject: "false"
+ 
+   # clusterChecksRunner.env -- Environment variables specific to Cluster Checks Runner
+   ## ref: https://github.com/DataDog/datadog-agent/tree/main/Dockerfiles/agent#environment-variables
