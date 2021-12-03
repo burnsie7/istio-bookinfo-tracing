@@ -74,18 +74,19 @@ helm install datadog-agent -f datadog-values.yaml datadog/datadog --set targetSy
 
 ## Helpful commands
 
-# upgrading istio after adding tracing settings or tags, etc
+upgrading istio after adding tracing settings or tags, etc
 
 ```
 istioctl upgrade -f /path/to/your/new/manifest.yaml -y
 ```
 
-# upgrading datadog-agent after modifying datadog-valus.yaml
+upgrading datadog-agent after modifying datadog-valus.yaml
+
 ```
 helm upgrade datadog-agent -f datadog-values.yaml datadog/datadog --set targetSystem=linux
 ```
 
-# rollout new deployments after making changes to istio
+rollout new deployments after making changes to istio
 
 ```
 kubectl rollout restart deployment --namespace default

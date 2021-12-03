@@ -14,9 +14,16 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+require 'ddtrace'
 require 'webrick'
 require 'json'
 require 'net/http'
+
+Datadog.configure do |c|
+  # Configure the tracer here.
+  # Activate integrations, change tracer settings, etc...
+  # By default without additional configuration, nothing will be traced.
+end
 
 if ARGV.length < 1 then
     puts "usage: #{$PROGRAM_NAME} port"

@@ -696,12 +696,12 @@ clusterAgent:
       maxUnavailable: 0
 
   # clusterAgent.deploymentAnnotations -- Annotations to add to the cluster-agents's deployment
-  deploymentAnnotations: {}
-  #   key: "value"
+  deploymentAnnotations:
+    sidecar.istio.io/inject: "false"
 
   # clusterAgent.podAnnotations -- Annotations to add to the cluster-agents's pod(s)
-  podAnnotations: {}
-  #   key: "value"
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
 
   # clusterAgent.useHostNetwork -- Bind ports on the hostNetwork
   ## Useful for CNI networking where hostPort might
@@ -1096,12 +1096,12 @@ agents:
   #    value: "1"
 
   # agents.daemonsetAnnotations -- Annotations to add to the DaemonSet
-  daemonsetAnnotations: {}
-  #   key: "value"
+  daemonsetAnnotations:
+    sidecar.istio.io/inject: "false"
 
   # agents.podAnnotations -- Annotations to add to the DaemonSet's Pods
-  podAnnotations: {}
-  #   <POD_ANNOTATION>: '[{"key": "<KEY>", "value": "<VALUE>"}]'
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
 
   # agents.tolerations -- Allow the DaemonSet to schedule on tainted nodes (requires Kubernetes >= 1.6)
   tolerations: []
@@ -1303,12 +1303,12 @@ clusterChecksRunner:
     failureThreshold: 6
 
   # clusterChecksRunner.deploymentAnnotations -- Annotations to add to the cluster-checks-runner's Deployment
-  deploymentAnnotations: {}
-  #   key: "value"
+  deploymentAnnotations:
+    sidecar.istio.io/inject: "false"
 
   # clusterChecksRunner.podAnnotations -- Annotations to add to the cluster-checks-runner's pod(s)
-  podAnnotations: {}
-  #   key: "value"
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
 
   # clusterChecksRunner.env -- Environment variables specific to Cluster Checks Runner
   ## ref: https://github.com/DataDog/datadog-agent/tree/main/Dockerfiles/agent#environment-variables
