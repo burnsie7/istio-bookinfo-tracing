@@ -592,10 +592,7 @@ clusterAgent:
   # clusterAgent.env -- Set environment variables specific to Cluster Agent
   ## The Cluster-Agent supports many additional environment variables
   ## ref: https://docs.datadoghq.com/agent/cluster_agent/commands/#cluster-agent-options
-  env:
-    - name: DD_ENV
-      value: not_none
-
+  env: []
   # clusterAgent.envFrom --  Set environment variables specific to Cluster Agent from configMaps and/or secrets
   ## The Cluster-Agent supports many additional environment variables
   ## ref: https://docs.datadoghq.com/agent/cluster_agent/commands/#cluster-agent-options
