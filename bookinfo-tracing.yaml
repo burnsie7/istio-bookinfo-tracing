@@ -190,17 +190,16 @@ spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
-        #image: burnsie7/reviews:latest
-        image: docker.io/istio/examples-bookinfo-reviews-v1:1.16.2
-        imagePullPolicy: IfNotPresent
+        image: burnsie7/reviews:latest
+        #image: docker.io/istio/examples-bookinfo-reviews-v1:1.16.2
+        imagePullPolicy: Always
         env:
           - name: DD_AGENT_HOST
             valueFrom:
               fieldRef:
                 fieldPath: status.hostIP
-        env:
-        - name: LOG_DIR
-          value: "/tmp/logs"
+          - name: LOG_DIR
+            value: "/tmp/logs"
         ports:
         - containerPort: 9080
         volumeMounts:

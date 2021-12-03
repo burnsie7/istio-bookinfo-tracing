@@ -28,5 +28,6 @@ ARG star_color
 ENV SERVICE_VERSION ${service_version:-v1}
 ENV ENABLE_RATINGS ${enable_ratings:-false}
 ENV STAR_COLOR ${star_color:-black}
+ENV JAVA_TOOL_OPTIONS="-javaagent:/opt/ibm/wlp/usr/servers/defaultServer/dd-java-agent.jar -Ddd.jmxfetch.enabled=false"
 
-CMD ["/opt/ibm/wlp/bin/server", "-javaagent:/opt/ibm/wlp/usr/servers/defaultServer/dd-java-agent.jar", "run", "defaultServer"]
+CMD ["/opt/ibm/wlp/bin/server", "run", "defaultServer"]
