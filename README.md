@@ -16,12 +16,6 @@ https://istio.io/v1.9/docs/setup/getting-started/#download
 curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.9.2 TARGET_ARCH=x86_64 sh -
 ```
 
-Add [settings and env vars](https://docs.datadoghq.com/tracing/setup_overview/proxy_setup/?tab=istio#istio-configuration-and-installation) to demo.yaml or copy the one from this repo:
-
-```
-cp ./demo-tracing.yaml ./istio-1.9.2/manifests/profiles/demo.yaml
-```
-
 Modify bookinfo.yaml to include datadog trace agent port info and updated images.
 
 ```
@@ -39,11 +33,18 @@ kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
 kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
 istioctl analyze
 ```
+Add [settings and env vars](https://docs.datadoghq.com/tracing/setup_overview/proxy_setup/?tab=istio#istio-configuration-and-installation) to demo-tracing.yaml (or use one included) and upgrade istio to enable the datadog tracer.
+
+```
+cd ..
+istioctl upgrade -f demo-tracing.yaml
+kubectl rollout restart deployment --namespace default
+```
 
 Once you have determined there are no issues with the configuration, get the external url for the application.
 
 ```
-kubectl get svc istio-ingressgateway -n istio-system -0
+kubectl get svc istio-ingressgateway -n istio-system
 ```
 
 Your external url will be http://EXTERNAL_IP:80/productpage.  EKS will return a dns name, not an IP.
@@ -52,7 +53,7 @@ Your external url will be http://EXTERNAL_IP:80/productpage.  EKS will return a 
 http://********-**************-*********.us-blah-2.elb.amazonaws.com:80/productpage
 ```
 
-Confirm you can connect.
+Confirm you can connect.  If you cannot connect you may need to modify the security group attached to your [ELB](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#LoadBalancers:sort=loadBalancerName) (the external IP).
 
 ## Deploy Datadog agent
 
@@ -69,6 +70,12 @@ Install the Agent using helm.
 ```
 helm install datadog-agent -f datadog-values.yaml datadog/datadog --set targetSystem=linux
 ```
+
+# TODO:
+
+- Admission Controller to deploy config info to pods
+-
+
 
 # Appendix
 

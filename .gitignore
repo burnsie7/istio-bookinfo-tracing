@@ -3,3 +3,4 @@ local_*
 *.swp
 .env
 .DS_Store
+/istio-1.9.2
