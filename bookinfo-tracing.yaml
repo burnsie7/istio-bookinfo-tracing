@@ -68,6 +68,11 @@ spec:
       labels:
         app: details
         version: v1
+        tags.datadoghq.com/env: "bookinfo-env"
+        tags.datadoghq.com/service: "details-ruby"
+        tags.datadoghq.com/version: "1.5"
+      annotations:
+        apm.datadoghq.com/env: '{ "DD_ENV": "bookinfo-env", "DD_SERVICE": "details-ruby"}'
     spec:
       serviceAccountName: bookinfo-details
       containers:
@@ -75,11 +80,24 @@ spec:
         #image: burnsie7/details:latest
         image: docker.io/istio/examples-bookinfo-details-v1:1.16.2
         imagePullPolicy: IfNotPresent
+        #env:
+          #- name: DD_AGENT_HOST
+            #valueFrom:
+              #fieldRef:
+                #fieldPath: status.hostIP
         env:
-          - name: DD_AGENT_HOST
+          - name: DD_ENV
             valueFrom:
               fieldRef:
-                fieldPath: status.hostIP
+                fieldPath: metadata.labels['tags.datadoghq.com/env']
+          - name: DD_SERVICE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/service']
+          - name: DD_VERSION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/version']
         ports:
         - containerPort: 9080
         securityContext:
@@ -127,6 +145,11 @@ spec:
       labels:
         app: ratings
         version: v1
+        tags.datadoghq.com/env: "bookinfo-env"
+        tags.datadoghq.com/service: "ratings-nodejs"
+        tags.datadoghq.com/version: "1.5"
+      annotations:
+        apm.datadoghq.com/env: '{ "DD_ENV": "bookinfo-env", "DD_SERVICE": "ratings-nodejs"}'
     spec:
       serviceAccountName: bookinfo-ratings
       containers:
@@ -134,11 +157,24 @@ spec:
         image: burnsie7/ratings:latest
         #image: docker.io/istio/examples-bookinfo-ratings-v1:1.16.2
         imagePullPolicy: IfNotPresent
+        #env:
+          #- name: DD_AGENT_HOST
+            #valueFrom:
+              #fieldRef:
+                #fieldPath: status.hostIP
         env:
-          - name: DD_AGENT_HOST
+          - name: DD_ENV
             valueFrom:
               fieldRef:
-                fieldPath: status.hostIP
+                fieldPath: metadata.labels['tags.datadoghq.com/env']
+          - name: DD_SERVICE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/service']
+          - name: DD_VERSION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/version']
         ports:
         - containerPort: 9080
         securityContext:
@@ -186,6 +222,11 @@ spec:
       labels:
         app: reviews
         version: v1
+        tags.datadoghq.com/env: "bookinfo-env"
+        tags.datadoghq.com/service: "reviews-java"
+        tags.datadoghq.com/version: "1.5"
+      annotations:
+        apm.datadoghq.com/env: '{ "DD_ENV": "bookinfo-env", "DD_SERVICE": "reviews-java" }'
     spec:
       serviceAccountName: bookinfo-reviews
       containers:
@@ -193,11 +234,24 @@ spec:
         image: burnsie7/reviews:latest
         #image: docker.io/istio/examples-bookinfo-reviews-v1:1.16.2
         imagePullPolicy: Always
+        #env:
+          #- name: DD_AGENT_HOST
+            #valueFrom:
+              #fieldRef:
+                #fieldPath: status.hostIP
         env:
-          - name: DD_AGENT_HOST
+          - name: DD_ENV
             valueFrom:
               fieldRef:
-                fieldPath: status.hostIP
+                fieldPath: metadata.labels['tags.datadoghq.com/env']
+          - name: DD_SERVICE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/service']
+          - name: DD_VERSION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/version']
           - name: LOG_DIR
             value: "/tmp/logs"
         ports:
@@ -341,6 +395,11 @@ spec:
       labels:
         app: productpage
         version: v1
+        tags.datadoghq.com/env: "bookinfo-env"
+        tags.datadoghq.com/service: "product-page-python"
+        tags.datadoghq.com/version: "1.5"
+      annotations:
+        apm.datadoghq.com/env: '{ "DD_ENV": "bookinfo-env", "DD_SERVICE": "product-page-python"}'
     spec:
       serviceAccountName: bookinfo-productpage
       containers:
@@ -348,11 +407,24 @@ spec:
         image: burnsie7/productpage:latest
         #image: docker.io/istio/examples-bookinfo-productpage-v1:1.16.2
         imagePullPolicy: IfNotPresent
+        #env:
+          #- name: DD_AGENT_HOST
+            #valueFrom:
+              #fieldRef:
+                #fieldPath: status.hostIP
         env:
-          - name: DD_AGENT_HOST
+          - name: DD_ENV
             valueFrom:
               fieldRef:
-                fieldPath: status.hostIP
+                fieldPath: metadata.labels['tags.datadoghq.com/env']
+          - name: DD_SERVICE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/service']
+          - name: DD_VERSION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/version']
         ports:
         - containerPort: 9080
         volumeMounts:

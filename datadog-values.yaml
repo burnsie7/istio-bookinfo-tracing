@@ -272,7 +272,7 @@ datadog:
   ## ref: https://docs.datadoghq.com/agent/docker/?tab=standard#environment-variables
   env:
     - name: DD_ENV
-      value: istio-bookinfo-env
+      value: env-agent
   #   - name: <ENV_VAR_NAME>
   #     value: <ENV_VAR_VALUE>
 
@@ -604,10 +604,10 @@ clusterAgent:
 
   admissionController:
     # clusterAgent.admissionController.enabled -- Enable the admissionController to be able to inject APM/Dogstatsd config and standard tags (env, service, version) automatically into your pods
-    enabled: false
+    enabled: True
 
     # clusterAgent.admissionController.mutateUnlabelled -- Enable injecting config without having the pod label 'admission.datadoghq.com/enabled="true"'
-    mutateUnlabelled: false
+    mutateUnlabelled: True
 
   # clusterAgent.confd -- Provide additional cluster check configurations
   ## Each key will become a file in /conf.d
