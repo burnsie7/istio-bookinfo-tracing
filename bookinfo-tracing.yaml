@@ -150,6 +150,7 @@ spec:
         tags.datadoghq.com/version: "1.5"
       annotations:
         apm.datadoghq.com/env: '{ "DD_ENV": "bookinfo-env", "DD_SERVICE": "ratings-nodejs"}'
+        ad.datadoghq.com/ratings.logs: '[{"source":"nodejs", "service":"ratings-nodejs"}]'
     spec:
       serviceAccountName: bookinfo-ratings
       containers:
